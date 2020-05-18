@@ -5,13 +5,21 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Protect the Village");
     sf::Clock Clock;
     sf::Event event;
-    sf::Texture texture1, texture2, texturetemp;
+    sf::Texture texture1, texture2, texture3, assets, texturetemp;
     texture1.loadFromFile("Resources/made_with.bmp");
     sf::Sprite logo(texture1);
     texture2.loadFromFile("Resources/main_menu.bmp");   
     sf::Sprite main_menu(texture2);
+    texture3.loadFromFile("Resources/towers.psd");
+    sf::Sprite towers(texture3);
     texturetemp.loadFromFile("Resources/multiplayer.bmp");
     sf::Sprite multiplayer(texturetemp);
+
+    assets.loadFromFile("Resources/assets.psd");
+    sf::Sprite arrowTower1(assets, sf::IntRect(93,92,80,80));
+    sf::Sprite arrowTower2(assets);
+    sf::Sprite arrowTower3(assets);
+
     game_state gameState = START_SCREEN;
     sf::RectangleShape SinglePlayer(sf::Vector2f(435, 55)), Multiplayer(sf::Vector2f(395, 55)), Quit(sf::Vector2f(165, 50));
     
@@ -56,6 +64,7 @@ int main()
         }
         
         if (gameState == PLAYING_SOLO) {
+            
 
         }
 
