@@ -1,2 +1,17 @@
-﻿  PTV.cpp
+﻿  Game.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(180,39): warning C4305: аргумент: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(180,77): warning C4305: аргумент: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(180,115): warning C4305: аргумент: усечение из "double" в "T"
+          with
+          [
+              T=float
+          ]
   PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\Debug\PTV.exe
