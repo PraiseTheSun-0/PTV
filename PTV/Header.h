@@ -2,6 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include "StandardCursor.hpp"
 #include <vector>
+#include <string>
+#include <sstream>
+#include <array>
+#include <iostream>
 
 enum GAME_STATE {
 	START_SCREEN,
@@ -34,15 +38,29 @@ public:
 
 };
 
-class Enemies {
+class Attackers {
 public:
-	enum {
+	/*enum {
 		BAT,
-		GOBLIN,
-		ORC
-	};
+		ORC,
+		GOBLIN
+	};*/
+	int numOfEnemies = 10;
+	int HP = 100;
+	float movespeed = 0.025;
+	bool armored = false, flying = false;
+	struct enemies{
+		sf::Sprite enemy[3];
+		bool alive;
 
-	void spawn(sf::RenderWindow &window, sf::Sprite &enemies1, sf::Sprite &enemies2, sf::Sprite &enemies3, Game *game);
+	};
+	std::vector<enemies>monsters;
+	void spawn(sf::Sprite enemy[3], sf::RenderWindow& window, Game* game); 
+	void prepareWave(int numberOfEnemies, sf::Sprite enemy[]);
+
 };
 
+
+
 bool isMouseIn(sf::RenderWindow &window, sf::RectangleShape &rectangle);
+bool cmpf(float, float, float);

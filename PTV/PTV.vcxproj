@@ -153,7 +153,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MapLayout.cpp" />
     <ClCompile Include="PTV.cpp" />
     <ClCompile Include="StandardCursor.cpp" />
   </ItemGroup>
