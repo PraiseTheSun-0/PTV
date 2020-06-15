@@ -153,11 +153,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BuildMenu.cpp" />
     <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MapLayout.cpp" />
     <ClCompile Include="PTV.cpp" />
     <ClCompile Include="StandardCursor.cpp" />
+    <ClCompile Include="Towers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h" />

@@ -21,16 +21,16 @@ void Game::run() {
 
     sf::Font font;
     font.loadFromFile("Resources/font.ttf");
-    sf::Text timeUntilWave; timeUntilWave.setFont(font); timeUntilWave.setCharacterSize(50); timeUntilWave.move(400, 0); timeUntilWave.setFillColor(sf::Color::Black);
+    sf::Text timeUntilWave; timeUntilWave.setFont(font); timeUntilWave.setCharacterSize(35); timeUntilWave.setPosition(sf::Vector2f(600, 0)); timeUntilWave.setFillColor(sf::Color::Black);
+    sf::Text startWave; startWave.setFont(font); startWave.setCharacterSize(50); startWave.setFillColor(sf::Color::Black); startWave.setPosition(sf::Vector2f(676, 660));
 
-
-    sf::Texture texture1, texture2, texture3, assets, texturetemp, texturetemp2;
+    sf::Texture texture1, texture2, background, assets, texturetemp, texturetemp2;
     texture1.loadFromFile("Resources/made_with.bmp");
     sf::Sprite logo(texture1);
     texture2.loadFromFile("Resources/main_menu.bmp");
     sf::Sprite main_menu(texture2);
-    texture3.loadFromFile("Resources/towers.psd");
-    sf::Sprite towers(texture3);
+    background.loadFromFile("Resources/game_background.bmp");
+    sf::Sprite game_background(background);
     texturetemp.loadFromFile("Resources/multiplayer.bmp");
     sf::Sprite multiplayer(texturetemp);
 
@@ -39,9 +39,11 @@ void Game::run() {
 
     assets.loadFromFile("Resources/assets.psd");
     sf::Sprite arrowTower1(assets, sf::IntRect(93, 92, 80, 80));
-    sf::Sprite arrowTower2(assets);
+    sf::Sprite arrowTower2(assets, sf::IntRect(93, 92, 80, 80));
     sf::Sprite arrowTower3(assets);
-    sf::Sprite Bat[3]; Bat[0] = sf::Sprite(assets, sf::IntRect(472, 118, 56, 44)); Bat[1] = sf::Sprite(assets, sf::IntRect(534, 118, 54, 34)); Bat[2] = sf::Sprite(assets, sf::IntRect(591, 111, 60, 45));
+    sf::Sprite Bat[3]; Bat[0] = sf::Sprite(assets, sf::IntRect(460, 99, 84, 81)); Bat[1] = sf::Sprite(assets, sf::IntRect(551, 99, 84, 81)); Bat[2] = sf::Sprite(assets, sf::IntRect(640, 99, 84, 81));
+    sf::Sprite Orc[3]; Orc[0] = sf::Sprite(assets, sf::IntRect(454, 263, 84, 81)); Orc[1] = sf::Sprite(assets, sf::IntRect(559, 263, 84, 81)); Orc[2] = sf::Sprite(assets, sf::IntRect(644, 263, 84, 81));
+    sf::Sprite Goblin[3]; Goblin[0] = sf::Sprite(assets, sf::IntRect(443, 364, 84, 81)); Goblin[1] = sf::Sprite(assets, sf::IntRect(547, 364, 84, 81)); Goblin[2] = sf::Sprite(assets, sf::IntRect(644, 364, 84, 81));
     
 
     GAME_STATE gameState = START_SCREEN;
@@ -50,9 +52,13 @@ void Game::run() {
     BuildMenu.setFillColor(sf::Color(144)); BuildMenu.setPosition(sf::Vector2f(1600, 900)); //todo remove
 
     MapLayout map_layout(PLAYING_SOLO);
+
+    Towers tower(arrowTower1);
+
+    sf::RectangleShape startWaveButton(sf::Vector2f(255, 70)); startWaveButton.setPosition(sf::Vector2f(676, 660));
     Attackers enemies;
     static bool showMenu = false, waveStarted = false;
-    static int numEnemies = 0;
+    static int lives = 5, gold = 100, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
     static float difficultyMultiplier = 1.0;
 
     while (window.isOpen()) {
@@ -81,48 +87,130 @@ void Game::run() {
         }
 
         if (gameState == PLAYING_SOLO) {
-            
-            window.draw(singleplayerpath);
-            if (showMenu)window.draw(BuildMenu);
-
-            for (int l = 0; l < 209; l++) {
-                if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
-                    sf::StandardCursor Cursor(sf::StandardCursor::HAND);
-                    Cursor.set(window.getSystemHandle());
 
 
+            if (lives > 0) {
+                window.draw(singleplayerpath);
+
+                std::ostringstream text;
+                sf::Text Gold; Gold.setFont(font); Gold.setCharacterSize(40); Gold.setFillColor(sf::Color::Black); Gold.setPosition(sf::Vector2f(1290, 0));
+                sf::Text Lives; Lives.setFont(font); Lives.setCharacterSize(40); Lives.setFillColor(sf::Color::Black);
+                text << "Gold: " << gold;
+                std::string string_text = text.str();
+                Gold.setString(string_text);
+                window.draw(Gold);
+                text.str(""); 
+                text << "Lives left: " << lives;
+                string_text = text.str();
+                Lives.setString(string_text);
+                window.draw(Lives);
+                gold--;     //todo remove
+                if (showMenu)window.draw(BuildMenu);
+
+                for (int l = 0; l < 209; l++) {
+                    if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
+                        sf::StandardCursor Cursor(sf::StandardCursor::HAND);
+                        Cursor.set(window.getSystemHandle());
+
+
+                    }
                 }
-            }
 
-            if (!waveStarted) {
                 std::ostringstream ss;
-                ss << "Wave spawns in: " << int(2 - this->waveTimer.getElapsedTime().asSeconds());
-                std::string str = ss.str();
-                timeUntilWave.setString(str);
-                window.draw(timeUntilWave);
+                if (!waveStarted) {
 
-                if (2 - this->waveTimer.getElapsedTime().asSeconds() < 0) {
-                    waveStarted = true;
-                    waveTimer.restart();
-                    enemies.prepareWave(10, Bat);
-                }
-            }
-            else {
-                for (int i = 0; i < numEnemies; i++) {
-                    if(enemies.monsters[i].alive) enemies.spawn(enemies.monsters[i].enemy, window, this);
-                }
-                if (numEnemies < 10 && waveTimer.getElapsedTime().asMilliseconds() > 1000) {
-                    waveTimer.restart();
-                    numEnemies++;
-                }
-            }
 
+                    ss << "Wave " << waveNum << " spawns in: " << int(timeUntilStart - this->waveTimer.getElapsedTime().asSeconds());   
+                    std::string str = ss.str();
+                    timeUntilWave.setString(str);
+                    window.draw(timeUntilWave);
+
+                    startWave.setString("Start now");
+                    window.draw(startWave);
+
+                    if (timeUntilStart - this->waveTimer.getElapsedTime().asSeconds() < 0) {
+                        waveStarted = true;
+                        waveTimer.restart();
+                        int randomEnemy = rand() % 3;
+                        switch (randomEnemy) {
+                        case 0:
+                            enemies.prepareWave(BAT, Bat, map_layout.Tiles.tiles[19].getPosition(), difficultyMultiplier);
+                            break;
+                        case 1:
+                            enemies.prepareWave(ORC, Orc, map_layout.Tiles.tiles[19].getPosition(), difficultyMultiplier);
+                            break;
+                        case 2:
+                            enemies.prepareWave(GOBLIN, Goblin, map_layout.Tiles.tiles[19].getPosition(), difficultyMultiplier);
+                            break;
+                        }
+
+                    }
+                }
+                else {
+                    int enemiesAlive = 0;
+                    for (int k = 0; k < enemies.monsters.size(); k++) if (enemies.monsters[k].alive) enemiesAlive++;
+                    ss << "Wave " << waveNum << ". Enemies left:" << enemiesAlive;
+                    std::string str = ss.str();
+                    timeUntilWave.setString(str);
+                    window.draw(timeUntilWave);
+
+                    bool waveGoing = false;
+                    for (int i = 0; i < numEnemies; i++) {
+                        if (enemies.monsters[i].alive) {
+                            waveGoing = true;
+                            if (enemies.monsters[i].checkPointReached[8]) {
+                                enemies.monsters[i].alive = false;
+                                lives -= enemies.monsters[i].livesTaken;
+                            }
+                            else if (enemies.monsters[i].checkPointReached[7]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, RIGHT);
+                            else if (enemies.monsters[i].checkPointReached[6]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, UP);
+                            else if (enemies.monsters[i].checkPointReached[5]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, LEFT);
+                            else if (enemies.monsters[i].checkPointReached[4]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, DOWN);
+                            else if (enemies.monsters[i].checkPointReached[3]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, LEFT);
+                            else if (enemies.monsters[i].checkPointReached[2]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, UP);
+                            else if (enemies.monsters[i].checkPointReached[1]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, RIGHT);
+                            else if (enemies.monsters[i].checkPointReached[0]) move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, DOWN);
+                            else move(enemies.monsters[i].enemy, enemies.monsters[i].movespeed, RIGHT);
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[22].getGlobalBounds())) enemies.monsters[i].checkPointReached[0] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[173].getGlobalBounds())) enemies.monsters[i].checkPointReached[1] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[167].getGlobalBounds())) enemies.monsters[i].checkPointReached[2] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[72].getGlobalBounds())) enemies.monsters[i].checkPointReached[3] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[85].getGlobalBounds())) enemies.monsters[i].checkPointReached[4] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[143].getGlobalBounds())) enemies.monsters[i].checkPointReached[5] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[118].getGlobalBounds())) enemies.monsters[i].checkPointReached[6] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[24].getGlobalBounds())) enemies.monsters[i].checkPointReached[7] = true;
+                            if (enemies.monsters[i].enemy[0].getGlobalBounds().intersects(map_layout.Tiles.tiles[56].getGlobalBounds())) enemies.monsters[i].checkPointReached[8] = true;
+                            enemies.spawn(enemies.monsters[i].enemy, window, this);
+                        }
+                    }
+
+                    if (numEnemies < enemies.monsters.size() && waveTimer.getElapsedTime().asMilliseconds() > enemies.timeBetweenSpawn) {
+                        waveTimer.restart();
+                        numEnemies++;
+                    }
+                    if (!waveGoing) {
+                        waveStarted = false;
+                        waveNum++;
+                        numEnemies = 1;
+                        difficultyMultiplier += 0.1;
+                        waveTimer.restart();
+                        enemies.monsters.clear();
+                    }
+                }
+                ss.str("");
+            }else {
+                window.draw(game_background);
+                sf::Text lost; lost.setFont(font); lost.setCharacterSize(72); lost.setFillColor(sf::Color::Black); lost.setPosition(sf::Vector2f(676, 400));
+                lost.setString("You lost :(");
+                window.draw(lost);
+            }
         }
 
         if (gameState == PLAYING_TWO) {
             window.draw(multiplayer);
         }
 
+        timeUntilStart = 30;
 
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
@@ -154,6 +242,9 @@ void Game::run() {
                             showMenu = true;
                         }
 
+                    }
+                    if (isMouseIn(window, startWaveButton) && !waveStarted) {
+                        timeUntilStart = 0;
                     }
                     
                 }

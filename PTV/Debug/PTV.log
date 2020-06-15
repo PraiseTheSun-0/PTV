@@ -1,3 +1,21 @@
-﻿  Game.cpp
-C:\Users\Nikita\source\repos\PTV\PTV\Header.h(50,25): warning C4305: инициализация: усечение из "double" в "float"
+﻿  BuildMenu.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+  Enemies.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+C:\Users\Nikita\source\repos\PTV\PTV\Enemies.cpp(64,33): warning C4244: *=: преобразование "float" в "int", возможна потеря данных
+C:\Users\Nikita\source\repos\PTV\PTV\Enemies.cpp(80,68): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+  Game.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(151,39): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(187,36): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(195,52): warning C4305: +=: усечение из "double" в "float"
+  MapLayout.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+  PTV.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+  StandardCursor.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+  Towers.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\Header.h(71,25): warning C4305: инициализация: усечение из "double" в "float"
+  Создание кода...
   PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\Debug\PTV.exe

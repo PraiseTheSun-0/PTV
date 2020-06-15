@@ -18,9 +18,9 @@ MapLayout::MapLayout(GAME_STATE game_state) {
 			}
 		}
 		for (int i = 19; i < 22; i++)Tiles.isPath[i] = true;
-		Tiles.isPath[40] = true;
+		Tiles.isPath[37] = true;  Tiles.isPath[36] = true; Tiles.isPath[40] = true;
 		for (int i = 43; i < 57; i++)Tiles.isPath[i] = true;
-		Tiles.isPath[59] = true; Tiles.isPath[62] = true; Tiles.isPath[78] = true; Tiles.isPath[81] = true;
+		Tiles.isPath[59] = true; Tiles.isPath[62] = true; Tiles.isPath[75] = true; Tiles.isPath[74] = true; Tiles.isPath[78] = true; Tiles.isPath[81] = true;
 		for (int i = 86; i < 91; i++)Tiles.isPath[i] = true;
 		Tiles.isPath[97] = true; Tiles.isPath[100] = true; Tiles.isPath[105] = true; Tiles.isPath[109] = true; Tiles.isPath[116] = true;
 		for (int i = 119; i < 125; i++)Tiles.isPath[i] = true;
