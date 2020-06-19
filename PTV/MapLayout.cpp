@@ -17,7 +17,9 @@ MapLayout::MapLayout(GAME_STATE game_state) {
 				tile_number++;
 			}
 		}
-		for (int i = 19; i < 22; i++)Tiles.isPath[i] = true;
+		for (int i = 0; i < 3; i++)Tiles.isPath[i] = true;
+		for (int i = 7; i < 13; i++)Tiles.isPath[i] = true;
+		for (int i = 15; i < 22; i++)Tiles.isPath[i] = true;
 		Tiles.isPath[37] = true;  Tiles.isPath[36] = true; Tiles.isPath[40] = true;
 		for (int i = 43; i < 57; i++)Tiles.isPath[i] = true;
 		Tiles.isPath[59] = true; Tiles.isPath[62] = true; Tiles.isPath[75] = true; Tiles.isPath[74] = true; Tiles.isPath[78] = true; Tiles.isPath[81] = true;

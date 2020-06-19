@@ -39,7 +39,7 @@ void Game::run() {
 
     assets.loadFromFile("Resources/assets.psd");
     sf::Sprite arrowTower1(assets, sf::IntRect(93, 92, 80, 80));
-    sf::Sprite arrowTower2(assets, sf::IntRect(93, 92, 80, 80));
+    sf::Sprite arrowTower2(assets, sf::IntRect(173, 92, 80, 80));
     sf::Sprite arrowTower3(assets);
     sf::Sprite Bat[3]; Bat[0] = sf::Sprite(assets, sf::IntRect(460, 99, 84, 81)); Bat[1] = sf::Sprite(assets, sf::IntRect(551, 99, 84, 81)); Bat[2] = sf::Sprite(assets, sf::IntRect(640, 99, 84, 81));
     sf::Sprite Orc[3]; Orc[0] = sf::Sprite(assets, sf::IntRect(454, 263, 84, 81)); Orc[1] = sf::Sprite(assets, sf::IntRect(559, 263, 84, 81)); Orc[2] = sf::Sprite(assets, sf::IntRect(644, 263, 84, 81));
@@ -47,18 +47,18 @@ void Game::run() {
     
 
     GAME_STATE gameState = START_SCREEN;
-    sf::RectangleShape SinglePlayer(sf::Vector2f(435, 55)), Multiplayer(sf::Vector2f(395, 55)), Quit(sf::Vector2f(165, 50)), BuildMenu(sf::Vector2f(350, 600));
-
-    BuildMenu.setFillColor(sf::Color(144)); BuildMenu.setPosition(sf::Vector2f(1600, 900)); //todo remove
+    sf::RectangleShape SinglePlayer(sf::Vector2f(435, 55)), Multiplayer(sf::Vector2f(395, 55)), Quit(sf::Vector2f(165, 50));
 
     MapLayout map_layout(PLAYING_SOLO);
 
-    Towers tower(arrowTower1);
+    BuildMenu build_menu;
+
+    std::vector<Towers*> towers;
 
     sf::RectangleShape startWaveButton(sf::Vector2f(255, 70)); startWaveButton.setPosition(sf::Vector2f(676, 660));
     Attackers enemies;
     static bool showMenu = false, waveStarted = false;
-    static int lives = 5, gold = 100, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
+    static int lives = 5, gold = 3000, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
     static float difficultyMultiplier = 1.0;
 
     while (window.isOpen()) {
@@ -104,8 +104,6 @@ void Game::run() {
                 string_text = text.str();
                 Lives.setString(string_text);
                 window.draw(Lives);
-                gold--;     //todo remove
-                if (showMenu)window.draw(BuildMenu);
 
                 for (int l = 0; l < 209; l++) {
                     if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
@@ -192,17 +190,34 @@ void Game::run() {
                         waveStarted = false;
                         waveNum++;
                         numEnemies = 1;
-                        difficultyMultiplier += 0.1;
+                        difficultyMultiplier += 0.1f;
                         waveTimer.restart();
                         enemies.monsters.clear();
                     }
+
+                }
+                for (int i = 0; i < towers.size(); i++) {
+                    window.draw(towers[i]->getSprite());
+
+                }
+                if (showMenu) {
+                    window.draw(build_menu);
                 }
                 ss.str("");
             }else {
                 window.draw(game_background);
                 sf::Text lost; lost.setFont(font); lost.setCharacterSize(72); lost.setFillColor(sf::Color::Black); lost.setPosition(sf::Vector2f(676, 400));
+                sf::Text quit; quit.setFont(font); quit.setCharacterSize(72); quit.setFillColor(sf::Color::Black); quit.setPosition(sf::Vector2f(1200, 700));
                 lost.setString("You lost :(");
                 window.draw(lost);
+                quit.setString("Quit");
+                window.draw(quit);
+                Quit.setPosition(sf::Vector2f(1210, 730));
+                if (isMouseIn(window, Quit)) {
+                    sf::StandardCursor Cursor(sf::StandardCursor::HAND);
+                    Cursor.set(window.getSystemHandle());
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) window.close();
+                }
             }
         }
 
@@ -233,15 +248,27 @@ void Game::run() {
                     }
                 }else if (gameState == PLAYING_SOLO) {
                     if (showMenu) {
-                        BuildMenu.setPosition(sf::Vector2f(1600, 900));
+                        if  (!map_layout.Tiles.isTower[build_menu.tile_id]) {
+                            if (isMouseIn(window, build_menu.button1)) { 
+                                build_menu.build(&gold, towers, ARROW, map_layout); 
+                            }
+                            if (isMouseIn(window, build_menu.button2)) {
+                                build_menu.build(&gold, towers, SPLASH, map_layout);
+                            }
+                            if (isMouseIn(window, build_menu.button3)) {
+                                build_menu.build(&gold, towers, MAGIC, map_layout);
+                            }
+                        }
                         showMenu = false;
                     }
                     else for (int l = 0; l < 209; l++) {
                         if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
-                            BuildMenu.setPosition(sf::Vector2f(1250, 300));
                             showMenu = true;
+                            if (!map_layout.Tiles.isTower[l]) {
+                                build_menu.isNotTower(map_layout.Tiles.tiles[l], l);
+                            }
                         }
-
+                        
                     }
                     if (isMouseIn(window, startWaveButton) && !waveStarted) {
                         timeUntilStart = 0;

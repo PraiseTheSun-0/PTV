@@ -35,7 +35,8 @@ void Attackers::spawn(sf::Sprite enemy[3], sf::RenderWindow& window, Game* game)
 }
 
 void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vector2f spawn, float waveMultiplier) {
-    int enemiesNum, HPmultiplier, moveSpeedMultiplier, livesTakenMultiplier = 1;
+    int enemiesNum = 3, HPmultiplier = 1, moveSpeedMultiplier = 1, livesTakenMultiplier = 1;
+    double bountyMultiplier = 1.0;
     bool armored = false, flying = false;
 
     switch (enemyType) {
@@ -43,6 +44,7 @@ void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vec
         enemiesNum = this->numOfEnemies[0];
         HPmultiplier = 2;
         moveSpeedMultiplier = 3;
+        bountyMultiplier = 1.4;
         flying = true;
         this->timeBetweenSpawn = 1000;
         break;
@@ -50,6 +52,7 @@ void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vec
         enemiesNum = this->numOfEnemies[1];
         HPmultiplier = 4;
         moveSpeedMultiplier = 1;
+        bountyMultiplier = 2.1;
         livesTakenMultiplier = 3;
         armored = true;
         this->timeBetweenSpawn = 3000;
@@ -58,10 +61,11 @@ void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vec
         enemiesNum = this->numOfEnemies[2];
         HPmultiplier = 1;
         moveSpeedMultiplier = 2;
+        bountyMultiplier = 1.2;
         this->timeBetweenSpawn = 400;
         break;
     }
-    enemiesNum *= waveMultiplier;
+    enemiesNum = int(enemiesNum * waveMultiplier);
 
     std::vector<std::array<sf::Sprite, 3>> sprites;
     for (int i = 0; i < enemiesNum; i++) {
@@ -77,8 +81,9 @@ void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vec
         this->monsters[i].enemy[0] = sprites[i][0]; this->monsters[i].enemy[1] = sprites[i][1]; this->monsters[i].enemy[2] = sprites[i][2];
         this->monsters[i].enemy[0].setPosition(spawn);  this->monsters[i].enemy[1].setPosition(spawn);  this->monsters[i].enemy[2].setPosition(spawn);
         this->monsters[i].alive = true;
-        this->monsters[i].HP = this->monsters[i].HP * HPmultiplier * waveMultiplier;
+        this->monsters[i].HP = int(this->monsters[i].HP * HPmultiplier * waveMultiplier);
         this->monsters[i].movespeed *= moveSpeedMultiplier;
+        this->monsters[i].bounty *= bountyMultiplier;
         this->monsters[i].livesTaken *= livesTakenMultiplier;
         this->monsters[i].armored = armored;
         this->monsters[i].flying = flying;
