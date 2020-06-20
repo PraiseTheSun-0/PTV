@@ -154,8 +154,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BuildMenu.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HPBar.cpp" />
     <ClCompile Include="MapLayout.cpp" />
     <ClCompile Include="PTV.cpp" />
     <ClCompile Include="StandardCursor.cpp" />

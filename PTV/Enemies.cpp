@@ -81,9 +81,10 @@ void Attackers::prepareWave(ENEMY_TYPE enemyType, sf::Sprite attacker[], sf::Vec
         this->monsters[i].enemy[0] = sprites[i][0]; this->monsters[i].enemy[1] = sprites[i][1]; this->monsters[i].enemy[2] = sprites[i][2];
         this->monsters[i].enemy[0].setPosition(spawn);  this->monsters[i].enemy[1].setPosition(spawn);  this->monsters[i].enemy[2].setPosition(spawn);
         this->monsters[i].alive = true;
-        this->monsters[i].HP = int(this->monsters[i].HP * HPmultiplier * waveMultiplier);
+        this->monsters[i].HP = int(this->monsters[i].HP * HPmultiplier * (waveMultiplier + 0.3));
+        this->monsters[i].currentHP = this->monsters[i].HP;
         this->monsters[i].movespeed *= moveSpeedMultiplier;
-        this->monsters[i].bounty *= bountyMultiplier;
+        this->monsters[i].bounty *= (bountyMultiplier * (waveMultiplier+0.1));
         this->monsters[i].livesTaken *= livesTakenMultiplier;
         this->monsters[i].armored = armored;
         this->monsters[i].flying = flying;

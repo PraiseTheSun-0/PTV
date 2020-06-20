@@ -30,7 +30,7 @@ MapLayout::MapLayout(GAME_STATE game_state) {
 		for (int i = 154; i < 167; i++)Tiles.isPath[i] = true;
 	}
 
-	if (game_state == PLAYING_TWO) {	//todo
+	if (game_state == PLAYING_TWO) {	
 		for (float k = bound_y; k < 900; k += 81) {
 			for (float i = bound_x; i < 1600; i += 84) {
 				Tiles.tiles[tile_number].setPosition(sf::Vector2f(i, k));

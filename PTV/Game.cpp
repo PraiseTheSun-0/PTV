@@ -2,7 +2,7 @@
 
 bool isMouseIn(sf::RenderWindow &window, sf::RectangleShape &rectangle) {
 	sf::Vector2i cursorPos = sf::Mouse::getPosition(window);
-	if (cursorPos.x >= rectangle.getGlobalBounds().left
+    if (cursorPos.x >= rectangle.getGlobalBounds().left
 		&& cursorPos.x <= rectangle.getGlobalBounds().left + rectangle.getSize().x
 		&& cursorPos.y >= rectangle.getGlobalBounds().top
 		&& cursorPos.y <= rectangle.getGlobalBounds().top+ rectangle.getSize().y) {
@@ -18,6 +18,7 @@ bool cmpf(float A, float B, float epsilon = 0.005f)
 
 void Game::run() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Protect the Village");
+    window.setFramerateLimit(60);
 
     sf::Font font;
     font.loadFromFile("Resources/font.ttf");
@@ -34,17 +35,13 @@ void Game::run() {
     texturetemp.loadFromFile("Resources/multiplayer.bmp");
     sf::Sprite multiplayer(texturetemp);
 
-    texturetemp2.loadFromFile("Resources/singleplayer path.psd"); //todo remove
+    texturetemp2.loadFromFile("Resources/singleplayer_path.png");
     sf::Sprite singleplayerpath(texturetemp2);
 
-    assets.loadFromFile("Resources/assets.psd");
-    sf::Sprite arrowTower1(assets, sf::IntRect(93, 92, 80, 80));
-    sf::Sprite arrowTower2(assets, sf::IntRect(173, 92, 80, 80));
-    sf::Sprite arrowTower3(assets);
+    assets.loadFromFile("Resources/assets.png");
     sf::Sprite Bat[3]; Bat[0] = sf::Sprite(assets, sf::IntRect(460, 99, 84, 81)); Bat[1] = sf::Sprite(assets, sf::IntRect(551, 99, 84, 81)); Bat[2] = sf::Sprite(assets, sf::IntRect(640, 99, 84, 81));
     sf::Sprite Orc[3]; Orc[0] = sf::Sprite(assets, sf::IntRect(454, 263, 84, 81)); Orc[1] = sf::Sprite(assets, sf::IntRect(559, 263, 84, 81)); Orc[2] = sf::Sprite(assets, sf::IntRect(644, 263, 84, 81));
     sf::Sprite Goblin[3]; Goblin[0] = sf::Sprite(assets, sf::IntRect(443, 364, 84, 81)); Goblin[1] = sf::Sprite(assets, sf::IntRect(547, 364, 84, 81)); Goblin[2] = sf::Sprite(assets, sf::IntRect(644, 364, 84, 81));
-    
 
     GAME_STATE gameState = START_SCREEN;
     sf::RectangleShape SinglePlayer(sf::Vector2f(435, 55)), Multiplayer(sf::Vector2f(395, 55)), Quit(sf::Vector2f(165, 50));
@@ -57,8 +54,8 @@ void Game::run() {
 
     sf::RectangleShape startWaveButton(sf::Vector2f(255, 70)); startWaveButton.setPosition(sf::Vector2f(676, 660));
     Attackers enemies;
-    static bool showMenu = false, waveStarted = false;
-    static int lives = 5, gold = 3000, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
+    static bool showMenu = false, waveStarted = false, bulletsEnded = true, waveGoing = false;;
+    static int lives = 20, gold = 150, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
     static float difficultyMultiplier = 1.0;
 
     while (window.isOpen()) {
@@ -68,9 +65,9 @@ void Game::run() {
         Cursor.set(window.getSystemHandle());
 
 
-        if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() <= 1.0f) {  //todo 4 sec
+        if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() <= 4.0f) { 
             window.draw(logo);
-        }else if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() > 1.0f) {  //todo 4 sec
+        }else if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() > 4.0f) {  
             gameState = MAIN_MENU;
         }
 
@@ -146,16 +143,16 @@ void Game::run() {
                 }
                 else {
                     int enemiesAlive = 0;
-                    for (int k = 0; k < enemies.monsters.size(); k++) if (enemies.monsters[k].alive) enemiesAlive++;
+                    for (unsigned int k = 0; k < enemies.monsters.size(); k++) if (enemies.monsters[k].alive) enemiesAlive++;
                     ss << "Wave " << waveNum << ". Enemies left:" << enemiesAlive;
                     std::string str = ss.str();
                     timeUntilWave.setString(str);
                     window.draw(timeUntilWave);
 
-                    bool waveGoing = false;
+                    waveGoing = false;
                     for (int i = 0; i < numEnemies; i++) {
                         if (enemies.monsters[i].alive) {
-                            waveGoing = true;
+
                             if (enemies.monsters[i].checkPointReached[8]) {
                                 enemies.monsters[i].alive = false;
                                 lives -= enemies.monsters[i].livesTaken;
@@ -182,10 +179,26 @@ void Game::run() {
                         }
                     }
 
+                    for (int i = 0; i < numEnemies; i++) {
+                        if (enemies.monsters[i].alive) {
+                            enemies.monsters[i].hpBar.update(enemies.monsters[i].currentHP, enemies.monsters[i].HP, enemies.monsters[i].enemy[0]);
+                            window.draw(enemies.monsters[i].hpBar);
+                        }
+                    }
+
+                    for (unsigned int l = 0; l < enemies.monsters.size(); l++) {
+                        if (enemies.monsters[l].alive) {
+                            waveGoing = true;
+                        }
+                    }
+
+                    enemies.monsters[0].spawned = true;
                     if (numEnemies < enemies.monsters.size() && waveTimer.getElapsedTime().asMilliseconds() > enemies.timeBetweenSpawn) {
                         waveTimer.restart();
+                        enemies.monsters[numEnemies].spawned = true;
                         numEnemies++;
                     }
+
                     if (!waveGoing) {
                         waveStarted = false;
                         waveNum++;
@@ -196,13 +209,29 @@ void Game::run() {
                     }
 
                 }
+                bulletsEnded = true;
                 for (int i = 0; i < towers.size(); i++) {
                     window.draw(towers[i]->getSprite());
-
+                    if (!waveGoing) towers[i]->bullets.clear();
+                    if (towers[i]->bullets.size()) bulletsEnded = false;
+                    if (!towers[i]->lockedOn) {
+                        towers[i]->findTarget(enemies);
+                        towers[i]->shoot(enemies);
+                        towers[i]->updateBullets(window, enemies);
+                        for (unsigned int l = 0; l < enemies.monsters.size(); l++) {
+                            if (enemies.monsters[l].killed) {
+                                enemies.monsters[l].killed = false;
+                                gold += enemies.monsters[l].bounty;
+                            }
+                        }
+                    }
+                    towers[i]->loseTarget();
                 }
+
                 if (showMenu) {
                     window.draw(build_menu);
                 }
+
                 ss.str("");
             }else {
                 window.draw(game_background);
@@ -230,7 +259,7 @@ void Game::run() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left){
 
                 if (gameState == MAIN_MENU) {
                     if (isMouseIn(window, SinglePlayer)) {
@@ -246,11 +275,12 @@ void Game::run() {
                     if (isMouseIn(window, Quit)) {
                         window.close();
                     }
-                }else if (gameState == PLAYING_SOLO) {
-                    if (showMenu) {
-                        if  (!map_layout.Tiles.isTower[build_menu.tile_id]) {
-                            if (isMouseIn(window, build_menu.button1)) { 
-                                build_menu.build(&gold, towers, ARROW, map_layout); 
+                }
+                else if (gameState == PLAYING_SOLO) {
+                    if (showMenu && isMouseIn(window, build_menu.menu)) {
+                        if (!map_layout.Tiles.isTower[build_menu.tile_id]) {   //building
+                            if (isMouseIn(window, build_menu.button1)) {
+                                build_menu.build(&gold, towers, ARROW, map_layout);
                             }
                             if (isMouseIn(window, build_menu.button2)) {
                                 build_menu.build(&gold, towers, SPLASH, map_layout);
@@ -259,23 +289,68 @@ void Game::run() {
                                 build_menu.build(&gold, towers, MAGIC, map_layout);
                             }
                         }
-                        showMenu = false;
-                    }
-                    else for (int l = 0; l < 209; l++) {
-                        if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
-                            showMenu = true;
-                            if (!map_layout.Tiles.isTower[l]) {
-                                build_menu.isNotTower(map_layout.Tiles.tiles[l], l);
+                        else {  //upgarde
+                            if (towers[build_menu.tower_index]->level < 5) {
+                                if (isMouseIn(window, build_menu.button1)) {
+                                    towers[build_menu.tower_index]->levelUp(&gold);
+                                    if (towers[build_menu.tower_index]->upgraded) {
+                                        build_menu.isTower(towers, build_menu.tile_id);
+                                        towers[build_menu.tower_index]->upgraded = false;
+                                    }
+                                }
+                                if (isMouseIn(window, build_menu.button2)) {
+                                    build_menu.sell(&gold, towers, map_layout);
+                                    build_menu.isNotTower(map_layout.Tiles.tiles[build_menu.tile_id], build_menu.tile_id);
+                                }
+                            }
+                            else if (towers[build_menu.tower_index]->level == 5) {
+                                if (isMouseIn(window, build_menu.button1)) {
+                                    towers[build_menu.tower_index]->upgrade1(&gold);
+                                    if (towers[build_menu.tower_index]->upgraded) {
+                                        build_menu.isTower(towers, build_menu.tile_id);
+                                        towers[build_menu.tower_index]->upgraded = false;
+                                    }
+                                }
+                                if (isMouseIn(window, build_menu.button2)) {
+                                    towers[build_menu.tower_index]->upgrade2(&gold);
+                                    if (towers[build_menu.tower_index]->upgraded) {
+                                        build_menu.isTower(towers, build_menu.tile_id);
+                                        towers[build_menu.tower_index]->upgraded = false;
+                                    }
+                                }
+                                if (isMouseIn(window, build_menu.button3)) {
+                                    build_menu.sell(&gold, towers, map_layout);
+                                    build_menu.isNotTower(map_layout.Tiles.tiles[build_menu.tile_id], build_menu.tile_id);
+                                }
+                            }
+                            else {
+                                if (isMouseIn(window, build_menu.button1)) {
+                                    build_menu.sell(&gold, towers, map_layout);
+                                    build_menu.isNotTower(map_layout.Tiles.tiles[build_menu.tile_id], build_menu.tile_id);
+                                }
                             }
                         }
-                        
                     }
-                    if (isMouseIn(window, startWaveButton) && !waveStarted) {
-                        timeUntilStart = 0;
+                    else {
+                        showMenu = false;
+                        for (int l = 0; l < 209; l++) {
+                            if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
+                                showMenu = true;
+                                if (map_layout.Tiles.isTower[l]) {
+                                    build_menu.isTower(towers, l);
+                                }
+                                else {
+                                    build_menu.isNotTower(map_layout.Tiles.tiles[l], l);
+                                }
+                            }
+                        }
                     }
-                    
                 }
+                if (isMouseIn(window, startWaveButton) && !waveStarted) {
+                    timeUntilStart = 0;
+                }   
             }
+            
         }
         window.display();
 
