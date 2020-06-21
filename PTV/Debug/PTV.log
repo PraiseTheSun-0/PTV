@@ -1,14 +1,5 @@
-﻿  Towers.cpp
+﻿  Game.cpp
 C:\Users\Nikita\source\repos\PTV\PTV\Header.h(122,26): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(81,20): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(92,176): warning C4244: -=: преобразование "float" в "int", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(101,181): warning C4244: -=: преобразование "float" в "int", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(122,33): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(123,37): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(124,47): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(125,35): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(157,47): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(174,47): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(217,27): warning C4305: =: усечение из "double" в "float"
-C:\Users\Nikita\source\repos\PTV\PTV\Towers.cpp(233,47): warning C4244: аргумент: преобразование "double" в "float", возможна потеря данных
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(198,36): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(215,35): warning C4018: <: несоответствие типов со знаком и без знака
   PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\Debug\PTV.exe

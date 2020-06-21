@@ -34,14 +34,16 @@ void Game::run() {
     sf::Sprite game_background(background);
     texturetemp.loadFromFile("Resources/multiplayer.bmp");
     sf::Sprite multiplayer(texturetemp);
-
     texturetemp2.loadFromFile("Resources/singleplayer_path.png");
     sf::Sprite singleplayerpath(texturetemp2);
 
     assets.loadFromFile("Resources/assets.png");
-    sf::Sprite Bat[3]; Bat[0] = sf::Sprite(assets, sf::IntRect(460, 99, 84, 81)); Bat[1] = sf::Sprite(assets, sf::IntRect(551, 99, 84, 81)); Bat[2] = sf::Sprite(assets, sf::IntRect(640, 99, 84, 81));
-    sf::Sprite Orc[3]; Orc[0] = sf::Sprite(assets, sf::IntRect(454, 263, 84, 81)); Orc[1] = sf::Sprite(assets, sf::IntRect(559, 263, 84, 81)); Orc[2] = sf::Sprite(assets, sf::IntRect(644, 263, 84, 81));
-    sf::Sprite Goblin[3]; Goblin[0] = sf::Sprite(assets, sf::IntRect(443, 364, 84, 81)); Goblin[1] = sf::Sprite(assets, sf::IntRect(547, 364, 84, 81)); Goblin[2] = sf::Sprite(assets, sf::IntRect(644, 364, 84, 81));
+    sf::Sprite Bat[3]; 
+    Bat[0] = sf::Sprite(assets, sf::IntRect(460, 99, 84, 81)); Bat[1] = sf::Sprite(assets, sf::IntRect(551, 99, 84, 81)); Bat[2] = sf::Sprite(assets, sf::IntRect(640, 99, 84, 81));
+    sf::Sprite Orc[3]; 
+    Orc[0] = sf::Sprite(assets, sf::IntRect(454, 263, 84, 81)); Orc[1] = sf::Sprite(assets, sf::IntRect(559, 263, 84, 81)); Orc[2] = sf::Sprite(assets, sf::IntRect(644, 263, 84, 81));
+    sf::Sprite Goblin[3]; 
+    Goblin[0] = sf::Sprite(assets, sf::IntRect(443, 364, 84, 81)); Goblin[1] = sf::Sprite(assets, sf::IntRect(547, 364, 84, 81)); Goblin[2] = sf::Sprite(assets, sf::IntRect(644, 364, 84, 81));
 
     GAME_STATE gameState = START_SCREEN;
     sf::RectangleShape SinglePlayer(sf::Vector2f(435, 55)), Multiplayer(sf::Vector2f(395, 55)), Quit(sf::Vector2f(165, 50));
@@ -55,7 +57,7 @@ void Game::run() {
     sf::RectangleShape startWaveButton(sf::Vector2f(255, 70)); startWaveButton.setPosition(sf::Vector2f(676, 660));
     Attackers enemies;
     static bool showMenu = false, waveStarted = false, bulletsEnded = true, waveGoing = false;;
-    static int lives = 20, gold = 150, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
+    static int lives = 20, gold = 5000, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
     static float difficultyMultiplier = 1.0;
 
     while (window.isOpen()) {
