@@ -1,5 +1,4 @@
-﻿  Game.cpp
-C:\Users\Nikita\source\repos\PTV\PTV\Header.h(122,26): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(198,36): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Nikita\source\repos\PTV\PTV\Game.cpp(215,35): warning C4018: <: несоответствие типов со знаком и без знака
-  PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\Debug\PTV.exe
+﻿  BuildMenu.cpp
+C:\Users\Nikita\source\repos\PTV\PTV\PTV\Header.h(122,26): warning C4305: инициализация: усечение из "double" в "float"
+C:\Users\Nikita\source\repos\PTV\PTV\PTV\BuildMenu.cpp(213,47): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+  PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\PTV\Debug\PTV.exe

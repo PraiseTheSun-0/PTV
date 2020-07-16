@@ -56,9 +56,9 @@ void Game::run() {
 
     sf::RectangleShape startWaveButton(sf::Vector2f(255, 70)); startWaveButton.setPosition(sf::Vector2f(676, 660));
     Attackers enemies;
-    static bool showMenu = false, waveStarted = false, bulletsEnded = true, waveGoing = false;;
-    static int lives = 20, gold = 5000, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
-    static float difficultyMultiplier = 1.0;
+    bool showMenu = false, waveStarted = false, bulletsEnded = true, waveGoing = false;;
+    int lives = 20, gold = 150, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
+    float difficultyMultiplier = 1.0;
 
     while (window.isOpen()) {
 
@@ -104,6 +104,7 @@ void Game::run() {
                 Lives.setString(string_text);
                 window.draw(Lives);
 
+                if (showMenu)window.draw(build_menu.highlight);
                 for (int l = 0; l < 209; l++) {
                     if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
                         sf::StandardCursor Cursor(sf::StandardCursor::HAND);

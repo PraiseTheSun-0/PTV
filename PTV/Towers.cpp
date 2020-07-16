@@ -89,7 +89,7 @@ void Towers::updateBullets(sf::RenderWindow& window, Attackers& enemies) {
 				if (this->hasSplash) {
 					for (unsigned int l = 0; l < enemies.monsters.size(); l++) {
 						if (l == bullets[i]->targetId || !enemies.monsters[l].alive) continue;
-						if(findRange(enemies.monsters[bullets[i]->targetId].enemy[0], enemies.monsters[l].enemy[0]) < 60) enemies.monsters[l].currentHP -= this->getDamage() * this->splashDamage;
+						if(findRange(enemies.monsters[bullets[i]->targetId].enemy[0], enemies.monsters[l].enemy[0]) < 60 && enemies.monsters[l].alive) enemies.monsters[l].currentHP -= this->getDamage() * this->splashDamage;
 					}
 				}
 			}
@@ -152,9 +152,9 @@ void ArrowTower::upgrade1(int* gold) {
 		this->projectile = projectile;
 
 		this->level++;
-		this->hitsTargets = 4;
-		this->setDamage(int(this->getDamage() * 0.9));
-		this->setAttackSpeed(this->getAttackSpeed() * 1.2);
+		this->hitsTargets = 5;
+		this->setDamage(int(this->getDamage() * 0.7));
+		this->setAttackSpeed(this->getAttackSpeed() * 1.3);
 		this->upgraded = true;
 	}
 }
@@ -170,8 +170,8 @@ void ArrowTower::upgrade2(int* gold) {
 
 		this->level += 2;
 		this->hitsThroughArmor = true;
-		this->setDamage(int(this->getDamage() * 2.5));
-		this->setAttackSpeed(this->getAttackSpeed() * 1.3);
+		this->setDamage(int(this->getDamage() * 2.7));
+		this->setAttackSpeed(this->getAttackSpeed() * 1.2);
 		this->upgraded = true;
 	}
 }
@@ -198,7 +198,7 @@ CannonTower::CannonTower() {
 	this->level = 1;
 	this->setCost(70);
 	this->hasSplash = true;
-	this->setDamage(100);
+	this->setDamage(140);
 	this->setAttackSpeed(1.1f);
 	this->setRange(130.0f);
 }
@@ -257,7 +257,7 @@ MagicTower::MagicTower() {
 	this->level = 1;
 	this->setCost(55);
 	this->setDamage(80);
-	this->setAttackSpeed(1.2f);
+	this->setAttackSpeed(1.1f);
 	this->hitsFlying = true;
 	this->hitsThroughArmor = true;
 }
@@ -272,7 +272,7 @@ void MagicTower::upgrade1(int* gold) {
 		this->projectile = projectile;
 
 		this->level++;
-		this->setDamage(int(this->getDamage() * 1.2));
+		this->setDamage(int(this->getDamage() * 1.3));
 		this->hasSplash = true;
 		this->upgraded = true;
 	}
