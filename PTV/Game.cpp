@@ -104,7 +104,11 @@ void Game::run() {
                 Lives.setString(string_text);
                 window.draw(Lives);
 
-                if (showMenu)window.draw(build_menu.highlight);
+                if (showMenu) { 
+                    window.draw(build_menu.highlight);
+                    if (build_menu.showRange) window.draw(build_menu.range);
+                }
+
                 for (int l = 0; l < 209; l++) {
                     if (isMouseIn(window, map_layout.Tiles.tiles[l]) && !map_layout.Tiles.isPath[l]) {
                         sf::StandardCursor Cursor(sf::StandardCursor::HAND);

@@ -1,4 +1,4 @@
 ﻿  BuildMenu.cpp
 C:\Users\Nikita\source\repos\PTV\PTV\PTV\Header.h(122,26): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Nikita\source\repos\PTV\PTV\PTV\BuildMenu.cpp(213,47): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+C:\Users\Nikita\source\repos\PTV\PTV\PTV\BuildMenu.cpp(219,47): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
   PTV.vcxproj -> C:\Users\Nikita\source\repos\PTV\PTV\Debug\PTV.exe

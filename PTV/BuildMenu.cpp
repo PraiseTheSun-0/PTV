@@ -2,7 +2,8 @@
 
 BuildMenu::BuildMenu() {
 
-	highlight.setRadius(30.0f); highlight.setFillColor(sf::Color(0,250,0,80));
+	highlight.setRadius(30.0f); highlight.setFillColor(sf::Color(0, 250, 0, 80));
+	range.setFillColor(sf::Color(0, 0, 0, 0)); range.setOutlineThickness(1.5f); range.setOutlineColor(sf::Color(0, 250, 0));
 	font.loadFromFile("Resources/font.ttf");
 	texture.loadFromFile("Resources/assets.png", sf::IntRect(1275, 498, 324, 398));
 	menuBackground.setTexture(texture);
@@ -26,6 +27,7 @@ void BuildMenu::isNotTower(sf::RectangleShape build_position, int tileId) {
 	this->tile_id = tileId;
 	highlight.setPosition(buildPosition);
 	highlight.move(10, 10);
+	showRange = false;
 }
 
 void BuildMenu::build(int* gold, std::vector<Towers*> &towers, TOWER_TYPE tower_type, MapLayout &map_layout) {
@@ -75,6 +77,10 @@ void BuildMenu::isTower(std::vector<Towers*> &towers, int tower_id) {
 
 	highlight.setPosition(towers[i]->getSprite().getPosition());
 	highlight.move(10, 18);
+	showRange = true;
+	range.setRadius(towers[i]->getRange());
+	range.setPosition(towers[i]->getSprite().getPosition());
+	range.move(-towers[i]->getRange() + 42, -towers[i]->getRange() + 41);
 
 	std::ostringstream os;
 	std::string towerInfo;

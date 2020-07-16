@@ -192,7 +192,8 @@ public:
 	sf::Sprite menuBackground;
 	sf::Text text1, text2, text3, text4;
 	sf::RectangleShape menu, button1, button2, button3;
-	sf::CircleShape highlight;
+	sf::CircleShape highlight, range;
+	bool showRange = false;
 	sf::Vector2f buildPosition;
 	int tile_id;
 	int tower_index;
