@@ -60,6 +60,9 @@ void Game::run() {
     int lives = 20, gold = 150, numEnemies = 1, waveNum = 1, timeUntilStart = 30;
     float difficultyMultiplier = 1.0;
 
+    sf::Music background_music; background_music.openFromFile("Resources/background.flac"); background_music.setLoop(true); background_music.setVolume(50.0f);
+    bool musicPlaying = false;
+
     while (window.isOpen()) {
 
         window.clear();
@@ -69,6 +72,10 @@ void Game::run() {
 
         if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() <= 4.0f) { 
             window.draw(logo);
+            if (musicPlaying == false && waveTimer.getElapsedTime().asSeconds() > 2.5f) {
+                background_music.play();
+                musicPlaying = true;
+            }
         }else if (gameState == START_SCREEN && waveTimer.getElapsedTime().asSeconds() > 4.0f) {  
             gameState = MAIN_MENU;
         }

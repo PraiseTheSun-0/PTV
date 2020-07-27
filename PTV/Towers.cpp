@@ -152,9 +152,9 @@ void ArrowTower::upgrade1(int* gold) {
 		this->projectile = projectile;
 
 		this->level++;
-		this->hitsTargets = 5;
-		this->setDamage(int(this->getDamage() * 0.7));
-		this->setAttackSpeed(this->getAttackSpeed() * 1.3);
+		this->hitsTargets = 3;
+		this->setDamage(int(this->getDamage() * 0.8));
+		this->setAttackSpeed(this->getAttackSpeed() * 1.15);
 		this->upgraded = true;
 	}
 }
@@ -198,8 +198,8 @@ CannonTower::CannonTower() {
 	this->level = 1;
 	this->setCost(70);
 	this->hasSplash = true;
-	this->setDamage(140);
-	this->setAttackSpeed(1.1f);
+	this->setDamage(210);
+	this->setAttackSpeed(1.5f);
 	this->setRange(130.0f);
 }
 
